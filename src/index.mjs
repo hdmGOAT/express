@@ -4,16 +4,24 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+const mockUsers = [
+  { id: 1, username: "hanscoolguy3000", displayName: "hans" },
+  { id: 2, username: "irairairiariari", displayName: "ira" },
+  { id: 3, username: "aasdfadawe", displayName: "wow" },
+];
+
+const mockProds = [
+  { id: 1, itemName: "gun", price: "100" },
+  { id: 2, itemName: "bomb", price: "50" },
+  { id: 3, itemName: "idk", price: "10" },
+];
+
 app.get("/", (request, response) => {
   response.status(201).send({ msg: "hello" });
 });
 
 app.get("/api/users", (request, response) => {
-  response.send([
-    { id: 1, username: "hanscoolguy3000", displayName: "hans" },
-    { id: 2, username: "irairairiariari", displayName: "ira" },
-    { id: 3, username: "aasdfadawe", displayName: "wow" },
-  ]);
+  response.send(mockUsers);
 });
 
 app.get("/api/users/:id", (request, response) => {
@@ -21,11 +29,7 @@ app.get("/api/users/:id", (request, response) => {
 });
 
 app.get("/api/products", (request, response) => {
-  response.send([
-    { id: 1, itemName: "gun", price: "100" },
-    { id: 2, itemName: "bomb", price: "50" },
-    { id: 3, itemName: "idk", price: "10" },
-  ]);
+  response.send(mockProds);
 });
 
 app.listen(PORT, () => {
