@@ -16,12 +16,15 @@ const mockProds = [
   { id: 3, itemName: "idk", price: "10" },
 ];
 
+app.listen(PORT, () => {
+  console.log(`Running on Port ${PORT}`);
+});
+
 app.get("/", (request, response) => {
   response.status(201).send({ msg: "hello" });
 });
 
 app.get("/api/users", (request, response) => {
-  
   const {
     query: { filter, value },
   } = request;
@@ -32,6 +35,11 @@ app.get("/api/users", (request, response) => {
     return response.send(
       mockUsers.filter((user) => user[filter].includes(value))
     );
+});
+
+app.post("/api/users", (request, response) => {
+  console.log(request.body);
+  return response.send(200);
 });
 
 app.get("/api/users/:id", (request, response) => {
@@ -49,6 +57,4 @@ app.get("/api/products", (request, response) => {
   response.send(mockProds);
 });
 
-app.listen(PORT, () => {
-  console.log(`Running on Port ${PORT}`);
-});
+
