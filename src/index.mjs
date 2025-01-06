@@ -90,6 +90,22 @@ app.patch("/api/users/:id", (request, response) => {
  return response.sendStatus(200);
 });
 
+app.delete("/api/users/:id", (request, response) => {
+  const {
+    params: { id },
+  } = request;
+
+  const parsedId = parseInt(id);
+
+  if (parsedId === NaN) return response.sendStatus(400);
+
+  const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
+  if (findUserIndex === -1) return response.sendStatus(404);
+
+  mockUsers.splice(findUserIndex);
+  return response.sendStatus(200);
+});
+
 app.get("/api/products", (request, response) => {
   response.send(mockProds);
 });
