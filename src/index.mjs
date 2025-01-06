@@ -79,14 +79,15 @@ app.patch("/api/users/:id", (request, response) => {
     body,
     params: { id },
   } = request;
-  parsedId = parseInt(id);
+ const parsedId = parseInt(id);
 
-  if (parsedId === NaN) return response.sendStatus(400);
+ if (parsedId === NaN) return response.sendStatus(400);
 
-  const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
-  if (findUserIndex === -1) return response.sendStatus(404);
+ const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
+ if (findUserIndex === -1) return response.sendStatus(404);
 
-  mockUsers[findUserIndex] = { ...mockUsers[findUserIndex], ...body };
+ mockUsers[findUserIndex] = { ...mockUsers[findUserIndex], ...body };
+ return response.sendStatus(200);
 });
 
 app.get("/api/products", (request, response) => {
