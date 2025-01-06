@@ -21,7 +21,17 @@ app.get("/", (request, response) => {
 });
 
 app.get("/api/users", (request, response) => {
-  response.send(mockUsers);
+  
+  const {
+    query: { filter, value },
+  } = request;
+
+  if (!filter && !value) return response.send(mockUsers);
+
+  if (filter && value)
+    return response.send(
+      mockUsers.filter((user) => user[filter].includes(value))
+    );
 });
 
 app.get("/api/users/:id", (request, response) => {
