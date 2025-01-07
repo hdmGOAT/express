@@ -1,5 +1,5 @@
 import express, { request, response } from "express";
-import { query, validationResult } from "express-validator";
+import { query, body, validationResult, matchedData } from "express-validator";
 
 const app = express();
 
@@ -54,7 +54,11 @@ app.use(loggingMiddleware, (request, response, next) => {
 
 app.get(
   "/api/users",
-  query("filter").isString().notEmpty(),
+  query("filter")
+    .isString()
+    .withMessage("must be a string")
+    .notEmpty()
+    .withMessage("must not be empty"),
   (request, response) => {
     const result = validationResult(request);
     console.log(result);
@@ -71,12 +75,30 @@ app.get(
   }
 );
 
-app.post("/api/users", (request, response) => {
-  const { body } = request;
-  const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...body }; //this shit is called the spreader operator
-  mockUsers.push(newUser);
-  return response.status(201).send(newUser);
-});
+app.post(
+  "/api/users",
+  body("username")
+    .notEmpty()
+    .withMessage("Username cannot be empty")
+    .isLength({ min: 5, max: 32 })
+    .withMessage("must be at least 5 characters with at most 32 characters")
+    .isString()
+    .withMessage("username mus be string"),
+  (request, response) => {
+    const result = validationResult(request);
+    console.log(result);
+
+    if (!result.isEmpty()) {
+      return response.status(400).send({ errors: result.array() });
+    }
+
+    const data = matchedData(request);
+
+    const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...data }; //this shit is called the spreader operator
+    mockUsers.push(newUser);
+    return response.status(201).send(newUser);
+  }
+);
 
 app.get("/api/users/:id", (request, response) => {
   console.log(request.params);
