@@ -4,6 +4,13 @@ const app = express();
 
 app.use(express.json());
 
+const loggingMiddleware = (request, response, next) => {
+  console.log(`${request.method} - ${request.url}`);
+  next();
+};
+
+app.use(loggingMiddleware);
+
 const PORT = process.env.PORT || 3000;
 
 const mockUsers = [
@@ -79,15 +86,15 @@ app.patch("/api/users/:id", (request, response) => {
     body,
     params: { id },
   } = request;
- const parsedId = parseInt(id);
+  const parsedId = parseInt(id);
 
- if (parsedId === NaN) return response.sendStatus(400);
+  if (parsedId === NaN) return response.sendStatus(400);
 
- const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
- if (findUserIndex === -1) return response.sendStatus(404);
+  const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
+  if (findUserIndex === -1) return response.sendStatus(404);
 
- mockUsers[findUserIndex] = { ...mockUsers[findUserIndex], ...body };
- return response.sendStatus(200);
+  mockUsers[findUserIndex] = { ...mockUsers[findUserIndex], ...body };
+  return response.sendStatus(200);
 });
 
 app.delete("/api/users/:id", (request, response) => {
@@ -102,7 +109,7 @@ app.delete("/api/users/:id", (request, response) => {
   const findUserIndex = mockUsers.findIndex((user) => user.id === parsedId);
   if (findUserIndex === -1) return response.sendStatus(404);
 
-  mockUsers.splice(findUserIndex);
+  mockUsers.splice(findUserIndex, 1);
   return response.sendStatus(200);
 });
 
