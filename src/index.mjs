@@ -1,4 +1,5 @@
 import express, { request, response } from "express";
+import { query } from "express-validator";
 
 const app = express();
 
@@ -51,18 +52,22 @@ app.use(loggingMiddleware, (request, response, next) => {
   next();
 });
 
-app.get("/api/users", (request, response) => {
-  const {
-    query: { filter, value },
-  } = request;
+app.get(
+  "/api/users",
+  query("filter").isString().notEmpty(),
+  (request, response) => {
+    const {
+      query: { filter, value },
+    } = request;
 
-  if (!filter && !value) return response.send(mockUsers);
+    if (!filter && !value) return response.send(mockUsers);
 
-  if (filter && value)
-    return response.send(
-      mockUsers.filter((user) => user[filter].includes(value))
-    );
-});
+    if (filter && value)
+      return response.send(
+        mockUsers.filter((user) => user[filter].includes(value))
+      );
+  }
+);
 
 app.post("/api/users", (request, response) => {
   const { body } = request;
