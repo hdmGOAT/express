@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
   query,
-  body,
   validationResult,
   checkSchema,
   matchedData,
@@ -67,6 +66,8 @@ router.post(
     return response.status(201).send(newUser);
   }
 );
+
+//ADD VALIDATION
 
 router.get("/api/users/:id", (request, response) => {
   console.log(request.params);
