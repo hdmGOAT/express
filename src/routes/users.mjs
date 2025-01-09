@@ -33,6 +33,15 @@ router.get(
     .notEmpty()
     .withMessage("must not be empty"),
   (request, response) => {
+    console.log(request.sessionID);
+    console.log(
+      request.sessionStore.get(request.session.id, (err, sessionData) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+      })
+    );
     const result = validationResult(request);
     console.log(result);
     const {

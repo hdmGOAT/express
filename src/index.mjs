@@ -26,9 +26,12 @@ app.listen(PORT, () => {
   console.log(`Running on Port ${PORT}`);
 });
 
+
+
 app.get("/", (request, response) => {
   console.log(request.session);
   console.log(request.session.id);
+  request.session.visited = true;
   response.cookie("hello", "world", { maxAge: 60_000 * 60 * 2, signed: true });
   response.status(201).send({ msg: "hello" });
 });
