@@ -9,7 +9,7 @@ router.get("/api/products", (request, response) => {
   if (request.cookies.hello && request.cookies.hello == "world") {
     return response.send([{ mockProds }]);
   }
-  return response.send({ msg: "lacking appropriate cookie" });
+  return response.status(403).send({ msg: "lacking appropriate cookie" });
 });
 
 export default router;
