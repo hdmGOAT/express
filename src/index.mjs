@@ -45,4 +45,13 @@ app.post("/api/auth", (request, response) => {
   if (!findUser) return response.status(401).send({ msg: "BAD CREDENTIALS" });
   if (findUser.password != password)
     return response.status(401).send({ msg: "BAD CREDENTIALS" });
+
+  request.session.user = findUser;
+  return response.status(200).send(findUser);
+});
+
+app.get("/api/auth/status", (request, response) => {
+  return request.session.user
+    ? response.status(200).send(request.session.user)
+    : response.status(401).send({ msg: "Not Authenticated" });
 });
