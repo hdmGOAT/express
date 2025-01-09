@@ -40,6 +40,7 @@ router.get(
           console.log(err);
           throw err;
         }
+        console.log(sessionData);
       })
     );
     const result = validationResult(request);
