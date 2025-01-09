@@ -13,5 +13,6 @@ app.listen(PORT, () => {
 });
 
 app.get("/", (request, response) => {
+  response.cookie("hello", "world", { maxAge: 60_000 * 60 * 2 });
   response.status(201).send({ msg: "hello" });
 });
