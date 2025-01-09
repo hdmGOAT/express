@@ -2,6 +2,7 @@ import express, { request, response } from "express";
 import routes from "./routes/index.mjs";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import { mockUsers } from "./utils/constants.mjs";
 
 const app = express();
 
@@ -26,12 +27,22 @@ app.listen(PORT, () => {
   console.log(`Running on Port ${PORT}`);
 });
 
-
-
 app.get("/", (request, response) => {
   console.log(request.session);
   console.log(request.session.id);
   request.session.visited = true;
   response.cookie("hello", "world", { maxAge: 60_000 * 60 * 2, signed: true });
   response.status(201).send({ msg: "hello" });
+});
+
+app.post("/api/auth", (request, response) => {
+  //ADD VALIDATION
+  const {
+    body: { username, password },
+  } = request;
+
+  const findUser = mockUsers.find((user) => user.username === username);
+  if (!findUser) return response.status(401).send({ msg: "BAD CREDENTIALS" });
+  if (findUser.password != password)
+    return response.status(401).send({ msg: "BAD CREDENTIALS" });
 });
