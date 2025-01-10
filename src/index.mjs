@@ -40,8 +40,12 @@ app.get("/", (request, response) => {
   response.status(201).send({ msg: "hello" });
 });
 
-app.post(
-  "/api/auth",
-  passport.authenticate("local"),
-  (request, response) => {}
-);
+app.post("/api/auth", passport.authenticate("local"), (request, response) => {
+  response.sendStatus(200);
+});
+
+app.get("/api/auth/status", (request, response) => {
+  console.log(request.user);
+  if (request.user) return response.status(200).send(request.user);
+  return response.sendStatus(401);
+});
