@@ -2,7 +2,6 @@ import express, { request, response } from "express";
 import routes from "./routes/index.mjs";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import { mockUsers } from "./utils/constants.mjs";
 import passport from "passport";
 import "./strategies/local-strategy.mjs";
 
@@ -48,4 +47,13 @@ app.get("/api/auth/status", (request, response) => {
   console.log(request.user);
   if (request.user) return response.status(200).send(request.user);
   return response.sendStatus(401);
+});
+
+app.post("/api/auth/logout", (request, response) => {
+  if (!request.user) return response.sendStatus(401);
+
+  request.logout((err) => {
+    if (err) return response.sendStatus(401);
+    response.send(200);
+  });
 });
