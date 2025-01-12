@@ -72,10 +72,7 @@ router.post(
 
     const data = matchedData(request);
 
-    const newUser = new User({
-      id: mockUsers[mockUsers.length - 1].id + 1,
-      ...data,
-    }); //this shit is called the spreader operator
+    const newUser = new User(data); 
     try {
       const savedUser = await newUser.save();
       return response.status(201).send(newUser);

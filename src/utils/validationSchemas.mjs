@@ -19,4 +19,15 @@ export const createUserValidationSchema = {
       errorMessage: "display name cannot be empty",
     },
   },
+  password: {
+    isLength: {
+      errorMessage: "password must be longer than 7 characters",
+      options: {
+        min: 7,
+      },
+    },
+    notEmpty: {
+      errorMessage: "Username must not be empty",
+    },
+  },
 };
