@@ -11,7 +11,7 @@ const app = express();
 mongoose
   .connect("mongodb://localhost/express")
   .then(() => console.log("connected to database"))
-  .catch((err) => console.err("error", err));
+  .catch((err) => console.err("error: ", err));
 
 app.use(express.json());
 app.use(cookieParser("helloWorld"));
