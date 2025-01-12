@@ -7,6 +7,7 @@ import {
 } from "express-validator";
 import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
 import { mockUsers } from "../utils/constants.mjs";
+import { User } from "../mongoose/schemas/user.mjs";
 
 const router = Router();
 
@@ -61,7 +62,7 @@ router.get(
 router.post(
   "/api/users",
   checkSchema(createUserValidationSchema),
-  (request, response) => {
+  async (request, response) => {
     const result = validationResult(request);
     console.log(result);
 
@@ -71,9 +72,17 @@ router.post(
 
     const data = matchedData(request);
 
-    const newUser = { id: mockUsers[mockUsers.length - 1].id + 1, ...data }; //this shit is called the spreader operator
-    mockUsers.push(newUser);
-    return response.status(201).send(newUser);
+    const newUser = new User({
+      id: mockUsers[mockUsers.length - 1].id + 1,
+      ...data,
+    }); //this shit is called the spreader operator
+    try {
+      const savedUser = await newUser.save();
+      return response.status(201).send(newUser);
+    } catch (err) {
+      console.log(err);
+      return response.sendStatus(400);
+    }
   }
 );
 
