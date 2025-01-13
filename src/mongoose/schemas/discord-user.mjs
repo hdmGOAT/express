@@ -7,7 +7,7 @@ const DiscordUserSchema = new mongoose.Schema({
     unique: true,
   },
   discordId: {
-    type: mongo.Schema.Types.String,
+    type: mongoose.Schema.Types.String,
     required: true,
     unique: true,
   },
