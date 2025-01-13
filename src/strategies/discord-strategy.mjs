@@ -10,8 +10,8 @@ passport.use(
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
       callbackURL: process.env.CLIENT_REDIRECT,
-      scope: ["identify"],
+      scope: ["identify", "guilds"],
     },
-    () => {}
+    (accessToken, refreshToken, profile) => {}
   )
 );
