@@ -1,0 +1,16 @@
+import mongoose, { mongo } from "mongoose";
+
+const DiscordUserSchema = new mongoose.Schema({
+  username: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+    unique: true,
+  },
+  discordId: {
+    type: mongo.Schema.Types.String,
+    required: true,
+    unique: true,
+  },
+});
+
+export const DiscordUser = mongoose.model("DiscordUser", DiscordUserSchema);

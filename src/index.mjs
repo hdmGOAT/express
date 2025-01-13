@@ -71,3 +71,11 @@ app.post("/api/auth/logout", (request, response) => {
 });
 
 app.get("/api/auth/discord", passport.authenticate('discord'));
+
+app.get(
+  "/api/auth/discord/redirect",
+  passport.authenticate("discord"),
+  (request, response) => {
+    response.sendStatus(200);
+  }
+);
