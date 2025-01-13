@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-passport.use(
+export default passport.use(
   new Strategy(
     {
       clientID: process.env.CLIENT_ID,
@@ -12,6 +12,9 @@ passport.use(
       callbackURL: process.env.CLIENT_REDIRECT,
       scope: ["identify", "guilds"],
     },
-    (accessToken, refreshToken, profile) => {}
+    (accessToken, refreshToken, profile, done) => {
+      console.log(profile);
+      done();
+    }
   )
 );
