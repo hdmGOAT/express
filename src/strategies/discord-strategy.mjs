@@ -14,7 +14,13 @@ export default passport.use(
       scope: ["identify"],
     },
     async (accessToken, refreshToken, profile, done) => {
-      const findUser = await DiscordUser.findOne({ discordId: profile.id });
+      let findUser;
+      try {
+        findUser = await DiscordUser.findOne({ discordId: profile.id });
+      } catch (err) {
+        return done(err, null);
+      }
+      
       if (!findUser) {
         const newUser = new DiscordUser({
           username: profile.username,
