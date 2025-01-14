@@ -1,1 +1,3 @@
-import { describe, it, beforeAll, beforeEach } from "@jest/globals";
+describe("get users", () => {
+  it("should get user by id", () => {});
+});

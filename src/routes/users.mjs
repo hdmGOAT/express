@@ -9,6 +9,7 @@ import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
 import { mockUsers } from "../utils/constants.mjs";
 import { User } from "../mongoose/schemas/user.mjs";
 import { hashPassword } from "../utils/helpers.mjs";
+import { getUserByIdHandler } from "../handlers/users.mjs";
 
 const router = Router();
 
@@ -86,16 +87,7 @@ router.post(
 
 //ADD VALIDATION
 
-router.get("/api/users/:id", (request, response) => {
-  console.log(request.params);
-  const parsedId = parseInt(request.params.id);
-  if (isNaN(parsedId))
-    return response.status(400).send({ msg: "Bad Request, Invalid ID" });
-
-  const findUser = mockUsers.find((user) => user.id === parsedId);
-  if (!findUser) return response.sendStatus(404);
-  return response.send(findUser);
-});
+router.get("/api/users/:id", resolveIndexByUserId, getUserByIdHandler);
 
 router.put("/api/users/:id", resolveIndexByUserId, (request, response) => {
   const { body, findUserIndex } = request;
