@@ -15,5 +15,11 @@ describe("get users", () => {
     getUserByIdHandler(mockRequest, mockResponse);
     expect(mockResponse.send).toHaveBeenCalled();
     expect(mockResponse.send).toHaveBeenCalledWith(mockUsers[1]);
+    expect(mockResponse.send).toHaveBeenCalledTimes(1);
+  });
+
+  it("should call sendStatus with 404 when user not found", () => {
+    const copyMockRequest = { ...mockRequest, findUserIndex: 100 };
+    getUserByIdHandler(copyMockRequest, mockResponse);
   });
 });
