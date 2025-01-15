@@ -97,7 +97,12 @@ describe("create users", () => {
     jest.spyOn(validator, "validationResult").mockImplementationOnce(() => ({
       isEmpty: jest.fn(() => true),
     }));
+    const saveMethod = jest
+      .spyOn(User.prototype, "save")
+      .mockResolvedValueOnce(() => Promise.reject("failed to save user"));
 
     await createUserHandler(mockRequest, mockResponse);
+    expect(saveMethod).toHaveBeenCalled();
+    expect(response.sendStatus).toHaveBeenCalledWith(400);
   });
 });
