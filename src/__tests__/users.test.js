@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 import { createUserHandler, getUserByIdHandler } from "../handlers/users.mjs";
 import { mockUsers } from "../utils/constants.mjs";
 import { response } from "express";
+import * as helpers from "../utils/helpers.mjs";
 
 jest.mock("express-validator", () => ({
   validationResult: jest.fn(() => ({
@@ -14,6 +15,10 @@ jest.mock("express-validator", () => ({
     password: "password",
     displayName: "test_name",
   })),
+}));
+
+jest.mock("../utils/helpers.mjs", () => ({
+  hashPassword: jest.fn((password) => `hashed_${password}`),
 }));
 
 const mockRequest = {
@@ -58,11 +63,11 @@ describe("create users", () => {
   });
 
   it("should return status of 201 and user is created", async () => {
-    jest.spyOn(validator, 'validationResult').mockImplementationOnce(()=({
-      isEmpty: jest.fn(()=> true)
-    }))
-    await createUserHandler(mockResponse, mockRequest)
-    expect(validator.matchedData).toHaveBeenCalled();
-    
+    jest.spyOn(validator, "validationResult").mockImplementationOnce(() => ({
+      isEmpty: jest.fn(() => true),
+    }));
+    await createUserHandler(mockResponse, mockRequest);
+    expect(validator.matchedData).toHaveBeenCalledWith(mockRequest);
+    expect(helpers.hashPassword).toHaveBeenCalled(password);
   });
 });
