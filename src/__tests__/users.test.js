@@ -1,4 +1,4 @@
-import validator from "express-validator";
+import validator, { matchedData } from "express-validator";
 import { validationResult } from "express-validator";
 import { createUserHandler, getUserByIdHandler } from "../handlers/users.mjs";
 import { mockUsers } from "../utils/constants.mjs";
@@ -8,6 +8,11 @@ jest.mock("express-validator", () => ({
   validationResult: jest.fn(() => ({
     isEmpty: jest.fn(() => false),
     array: jest.fn(() => [{ msg: "Invalid Field" }]),
+  })),
+  matchedData: jest.fn(() => ({
+    username: "test",
+    password: "password",
+    displayName: "test_name",
   })),
 }));
 
@@ -47,6 +52,12 @@ describe("create users", () => {
     expect(validator.validationResult).toHaveBeenCalledTimes(1);
     expect(validator.validationResult).toHaveBeenCalledWith(mockRequest);
     expect(mockResponse.status).toHaveBeenCalledWith(400);
-    expect(mockResponse.send).toHaveBeenCalledWith([{ msg: "Invalid Field" }]);
+    expect(mockResponse.send).toHaveBeenCalledWith({
+      errors: [{ msg: "Invalid Field" }],
+    });
+  });
+
+  it("should return status of 201 and user is created", async () => {
+    jest;
   });
 });
