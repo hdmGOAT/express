@@ -62,5 +62,7 @@ describe("create users", () => {
       isEmpty: jest.fn(()=> true)
     }))
     await createUserHandler(mockResponse, mockRequest)
+    expect(validator.matchedData).toHaveBeenCalled();
+    
   });
 });
