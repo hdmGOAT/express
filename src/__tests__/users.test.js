@@ -12,6 +12,7 @@ jest.mock("express-validator", () => ({
     array: jest.fn(() => [{ msg: "Invalid Field" }]),
   })),
   matchedData: jest.fn(() => ({
+    id: 1,
     username: "test",
     password: "password",
     displayName: "test_name",
@@ -69,6 +70,9 @@ describe("create users", () => {
     jest.spyOn(validator, "validationResult").mockImplementationOnce(() => ({
       isEmpty: jest.fn(() => true),
     }));
+
+    const saveMethod = jest.spyOn(User.prototype, "save").mockResolvedValueOnce;
+
     await createUserHandler(mockResponse, mockRequest);
     expect(validator.matchedData).toHaveBeenCalledWith(mockRequest);
     expect(helpers.hashPassword).toHaveBeenCalled(password);
@@ -79,6 +83,21 @@ describe("create users", () => {
       displayName: "test_name",
     });
 
-    expect(User.mock.instances[0].save).toHaveBeenCalled();
+    expect(saveMethod).toHaveBeenCalled();
+    expect(mockResponse.status).toHaveBeenCalledWith(201);
+    expect(mockResponse.send).toHaveBeenCalledWith({
+      id: 1,
+      username: "test",
+      password: "password",
+      displayName: "test_name",
+    });
+  });
+
+  it("should sendStatus of 400 when database save fails", async () => {
+    jest.spyOn(validator, "validationResult").mockImplementationOnce(() => ({
+      isEmpty: jest.fn(() => true),
+    }));
+
+    await createUserHandler(mockRequest, mockResponse);
   });
 });
