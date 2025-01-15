@@ -69,5 +69,6 @@ describe("create users", () => {
     await createUserHandler(mockResponse, mockRequest);
     expect(validator.matchedData).toHaveBeenCalledWith(mockRequest);
     expect(helpers.hashPassword).toHaveBeenCalled(password);
+    expect(helpers.hashPassword).toHaveReturnedWith(`hashed_${password}`);
   });
 });
