@@ -4,6 +4,7 @@ import { createUserHandler, getUserByIdHandler } from "../handlers/users.mjs";
 import { mockUsers } from "../utils/constants.mjs";
 import { response } from "express";
 import * as helpers from "../utils/helpers.mjs";
+import { User } from "../mongoose/schemas/user.mjs";
 
 jest.mock("express-validator", () => ({
   validationResult: jest.fn(() => ({
@@ -20,6 +21,8 @@ jest.mock("express-validator", () => ({
 jest.mock("../utils/helpers.mjs", () => ({
   hashPassword: jest.fn((password) => `hashed_${password}`),
 }));
+
+jest.mock("../mongoose/schemas/user.mjs");
 
 const mockRequest = {
   findUserIndex: 1,
@@ -70,5 +73,10 @@ describe("create users", () => {
     expect(validator.matchedData).toHaveBeenCalledWith(mockRequest);
     expect(helpers.hashPassword).toHaveBeenCalled(password);
     expect(helpers.hashPassword).toHaveReturnedWith(`hashed_${password}`);
+    expect(User).toHaveBeenCalledWith({
+      username: "test",
+      password: "password",
+      displayName: "test_name",
+    });
   });
 });
