@@ -47,5 +47,6 @@ describe("create users", () => {
     expect(validator.validationResult).toHaveBeenCalledTimes(1);
     expect(validator.validationResult).toHaveBeenCalledWith(mockRequest);
     expect(mockResponse.status).toHaveBeenCalledWith(400);
+    expect(mockResponse.send).toHaveBeenCalledWith([{ msg: "Invalid Field" }]);
   });
 });
