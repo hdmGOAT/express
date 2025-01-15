@@ -9,7 +9,7 @@ import { createUserValidationSchema } from "../utils/validationSchemas.mjs";
 import { mockUsers } from "../utils/constants.mjs";
 import { User } from "../mongoose/schemas/user.mjs";
 import { hashPassword } from "../utils/helpers.mjs";
-import { getUserByIdHandler } from "../handlers/users.mjs";
+import { createUserHandler, getUserByIdHandler } from "../handlers/users.mjs";
 
 const router = Router();
 
@@ -64,25 +64,7 @@ router.get(
 router.post(
   "/api/users",
   checkSchema(createUserValidationSchema),
-  async (request, response) => {
-    const result = validationResult(request);
-    console.log(result);
-
-    if (!result.isEmpty()) {
-      return response.status(400).send({ errors: result.array() });
-    }
-
-    const data = matchedData(request);
-    data.password = hashPassword(data.password);
-    const newUser = new User(data);
-    try {
-      const savedUser = await newUser.save();
-      return response.status(201).send(newUser);
-    } catch (err) {
-      console.log(err);
-      return response.sendStatus(400);
-    }
-  }
+  createUserHandler
 );
 
 //ADD VALIDATION
