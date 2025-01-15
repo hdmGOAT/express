@@ -2,6 +2,7 @@ import validator from "express-validator";
 import { validationResult } from "express-validator";
 import { createUserHandler, getUserByIdHandler } from "../handlers/users.mjs";
 import { mockUsers } from "../utils/constants.mjs";
+import { response } from "express";
 
 jest.mock("express-validator", () => ({
   validationResult: jest.fn(() => ({
@@ -44,5 +45,7 @@ describe("create users", () => {
   it("should status of 400 when met with errors", async () => {
     await createUserHandler(mockRequest, mockResponse);
     expect(validator.validationResult).toHaveBeenCalledTimes(1);
+    expect(validator.validationResult).toHaveBeenCalledWith(mockRequest);
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
   });
 });
