@@ -58,6 +58,9 @@ describe("create users", () => {
   });
 
   it("should return status of 201 and user is created", async () => {
-    jest;
+    jest.spyOn(validator, 'validationResult').mockImplementationOnce(()=({
+      isEmpty: jest.fn(()=> true)
+    }))
+    await createUserHandler(mockResponse, mockRequest)
   });
 });
