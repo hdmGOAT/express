@@ -78,5 +78,7 @@ describe("create users", () => {
       password: "password",
       displayName: "test_name",
     });
+
+    expect(User.mock.instances[0].save).toHaveBeenCalled();
   });
 });
