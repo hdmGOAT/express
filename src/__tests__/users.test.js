@@ -1,5 +1,13 @@
+import { validationResult } from "express-validator";
 import { getUserByIdHandler } from "../handlers/users.mjs";
 import { mockUsers } from "../utils/constants.mjs";
+
+jest.mock("express-validator", () => ({
+  validationResult: jest.fn(() => ({
+    isEmpty: jest.fn(() => false),
+    array: jest.fn(() => [{ msg: "Invalid Field" }]),
+  })),
+}));
 
 const mockRequest = {
   findUserIndex: 1,
@@ -8,6 +16,7 @@ const mockRequest = {
 const mockResponse = {
   sendStatus: jest.fn(),
   send: jest.fn(),
+  status: jest.fn(() => mockResponse),
 };
 
 describe("get users", () => {
@@ -25,6 +34,11 @@ describe("get users", () => {
     expect(mockResponse.sendStatus).toHaveBeenCalledWith(404);
     expect(mockResponse.sendStatus).toHaveBeenCalledTimes(1);
     expect(mockResponse.send).not.toHaveBeenCalled();
-    
   });
+});
+
+describe("create users", () => {
+  const mockRequest = {};
+
+  it("should ");
 });
