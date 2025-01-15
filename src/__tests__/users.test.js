@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import { getUserByIdHandler } from "../handlers/users.mjs";
+import { createUserHandler, getUserByIdHandler } from "../handlers/users.mjs";
 import { mockUsers } from "../utils/constants.mjs";
 
 jest.mock("express-validator", () => ({
@@ -40,5 +40,7 @@ describe("get users", () => {
 describe("create users", () => {
   const mockRequest = {};
 
-  it("should ");
+  it("should status of 400 when met with errors", async () => {
+    await createUserHandler(mockRequest, mockResponse);
+  });
 });
